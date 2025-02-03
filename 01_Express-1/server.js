@@ -24,6 +24,7 @@ app.get('/login/:filename', (req, res) => {
 	res.sendFile(path.join(__dirname, '/login.html'));
 });
 
+
 app.get('/oversigt/:filename', (req, res) => {
 	//res.setHeader('Content-Type', 'text/html');
 	res.sendFile(path.join(__dirname, '/oversigt.html'));
