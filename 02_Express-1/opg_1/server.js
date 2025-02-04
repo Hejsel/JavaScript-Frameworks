@@ -4,6 +4,8 @@ const port = 3001;
 const IP = 'localhost';
 //const path = require('path');
 
+app.use('/index', express.static('01_Express-2/opg_1/index.html'));
+
 app.get('/mult', (req, res) => {
 	let x = parseFloat(req.query.x);
 	let y = parseFloat(req.query.y);
