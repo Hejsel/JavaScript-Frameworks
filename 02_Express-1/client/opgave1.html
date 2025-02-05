@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="da">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Opgave 1</title>
+		<script src="./js/main.js" defer></script>
+	</head>
+
+	<body>
+		<input type="range" min="-100" max="100" id="input1" />
+		<input type="range" min="-100" max="100" id="input2" />
+		<p id="output"></p>
+
+		<script>
+			let input1 = document.getElementById('input1');
+			let input2 = document.getElementById('input2');
+
+			// ➤ Lyt efter ændringer på input-elementerne
+			input1.addEventListener('input', opdaterURL);
+			input2.addEventListener('input', opdaterURL);
+
+			// ➤ Hent værdier fra URL'en ved sideindlæsning
+			function hentFraURL() {
+				let params = new URLSearchParams(window.location.search);
+				if (params.has('x')) input1.value = params.get('x');
+				if (params.has('y')) input2.value = params.get('y');
+				gang(); // Opdater resultatet med det samme
+			}
+
+			// ➤ Indlæs værdier fra URL'en ved første load
+			hentFraURL();
+
+			// ➤ Opdater URL'en, når input ændres
+			function opdaterURL() {
+				let x = input1.value;
+				let y = input2.value;
+				history.replaceState(null, '', `?x=${x}&y=${y}`);
+				gang();
+			}
+
+			// ➤ Hent resultat fra serveren
+			async function gang() {
+				let x = input1.value;
+				let y = input2.value;
+				let res = await fetch(`/mult?x=${x}&y=${y}`);
+				document.getElementById('output').textContent = res.ok ? `${x} * ${y} = ${await res.text()}` : 'Fejl!';
+			}
+		</script>
+	</body>
+</html>

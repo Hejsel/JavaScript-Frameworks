@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Opgave 3</title>
+</head>
+
+<body>
+  <label for="tekst">Tekst:</label>
+  <input type="text" id="tekst" required>
+  <button id="submit">Submit</button>
+  <p id="output"></p>
+  <script>
+    function checksum(tekst) {
+      let sum = 0;
+      for (let i = 0; i < tekst.length; i++) sum ^= tekst.codePointAt(i);
+      return sum;
+    }
+    async function submit() {      
+      let tekst = document.getElementById("tekst").value; console.log(tekst);
+      let res = await fetch("/tekst", { body: tekst, method: "POST", headers: { "Content-Type": "text/plain" } });
+      if (res.ok) {
+        let sum = parseInt(await res.text());
+        document.getElementById("output").textContent = `Overførslen er ${sum === checksum(tekst) ? "" : "mis"}lykkedes`;
+      }
+    }
+    document.getElementById("submit").addEventListener("click", submit);
+  </script>
+</body>
+
+</html>
