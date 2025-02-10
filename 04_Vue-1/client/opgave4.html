@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="da">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Sekund Check</title>
+		<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+	</head>
+	<body>
+		<div id="app">
+			<p>Det aktuelle sekundtal er: {{ sekund }}</p>
+
+			<p v-if="sekund % 3 === 0 && sekund % 5 === 0">Sekundet kan deles med både 3 og 5</p>
+			<p v-else-if="sekund % 3 === 0">Sekundet kan kun deles med 3</p>
+			<p v-else-if="sekund % 5 === 0">Sekundet kan kun deles med 5</p>
+			<p v-else>Sekundet kan hverken deles med 3 eller 5</p>
+		</div>
+
+		<script>
+			const app = Vue.createApp({
+				data() {
+					return {
+						sekund: new Date().getSeconds(), // Start sekundet
+					};
+				},
+				mounted() {
+					// Opdaterer sekundet hvert sekund og Vue vil reagere på ændringen
+					setInterval(() => {
+						this.sekund = new Date().getSeconds();
+					}, 1000);
+				},
+			});
+
+			app.mount('#app');
+		</script>
+	</body>
+</html>

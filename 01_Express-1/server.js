@@ -10,21 +10,22 @@ const nav = `<nav>
 	<a href="/login">Login</a>
 </nav>`;
 
+// ➤ Statisk Routing
 app.use('/images', express.static('01_Express-1/images/offentlige'));
 
+// ➤ Dynamisk Routing (Forfinet)
 /*
 app.get('/:filename(login|oversigt)', (req, res) => {
 	res.sendFile(path.join(__dirname, req.params.filename + '.html'));
 }); //dette er reelt en hændelseslytter, req er objektet for anmodningen, res er objektet for responsen
 */
 
+// ➤ Dynamisk Routing (Besal)
 /*
 app.get('/login/:filename', (req, res) => {
 	//res.setHeader('Content-Type', 'text/html');
 	res.sendFile(path.join(__dirname, '/login.html'));
 });
-
-
 app.get('/oversigt/:filename', (req, res) => {
 	//res.setHeader('Content-Type', 'text/html');
 	res.sendFile(path.join(__dirname, '/oversigt.html'));

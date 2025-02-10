@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Document</title>
+	</head>
+	<body>
+		<div id="app">
+			{{text_interpolation}}
+			<p>{{ "pi er ca. lig med " + (22/7) }}</p>
+			<!--Alle html-elementer som Vue skal manipulere skal stå her-->
+		</div>
+		<!-- andet html efter behov, men det er udenfor Vue's scope-->
+		<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+		<!-- Reference til Vue runtime-->
+		<script>
+			//Vue-instancen står i script-elementet
+			const app = Vue.createApp({
+				//opretter Vue-instancen
+				data() {
+					//kreerer data-properties, dvs. her defineres variablerne i Vue-instancen
+					return {
+						text_interpolation: 'Hello World!',
+					};
+				}, //der kan også oprettes methods, templates, etc. i Vue-instancen (vises længere nede)
+			});
+			app.mount('#app'); //binder Vue-instancen til HTML-elementet ovenpå
+		</script>
+	</body>
+</html>

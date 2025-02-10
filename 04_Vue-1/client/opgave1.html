@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="da">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Tilfældige Tal med Vue</title>
+		<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+	</head>
+	<body>
+		<div id="app">
+			<h2>Tilfældige Tal og Deres Produkt</h2>
+			<p>Tal 1: {{ tal1 }}</p>
+			<p>Tal 2: {{ tal2 }}</p>
+			<p>Produkt: {{ produkt }}</p>
+			<button @click="genererTal">Generér nye tal</button>
+		</div>
+
+		<script>
+			Vue.createApp({
+				data() {
+					return {
+						tal1: 0,
+						tal2: 0,
+					};
+				},
+				computed: {
+					produkt() {
+						return this.tal1 * this.tal2;
+					},
+				},
+				methods: {
+					genererTal() {
+						this.tal1 = Math.floor(Math.random() * 2000001) - 1000000;
+						this.tal2 = Math.floor(Math.random() * 2000001) - 1000000;
+					},
+				},
+				mounted() {
+					this.genererTal(); // Generér initiale tal ved opstart
+				},
+			}).mount('#app');
+		</script>
+	</body>
+</html>

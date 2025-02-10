@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="da">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Vokaltæller</title>
+	</head>
+	<body>
+		<div id="app">
+			<label
+				>Skriv noget
+				<input type="text" v-model="tekst" />
+				<p>Teksten indeholder {{ antalVokaler }} vokaler</p>
+			</label>
+		</div>
+
+		<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+		<script>
+			const app = Vue.createApp({
+				data() {
+					return {
+						tekst: '',
+					};
+				},
+				computed: {
+					antalVokaler() {
+						const vokaler = 'aeiouyæøå';
+						let tæller = 0;
+						for (let tegn of this.tekst.toLowerCase()) {
+							if (vokaler.includes(tegn)) tæller++;
+						}
+						return tæller;
+					},
+				},
+			});
+
+			app.mount('#app');
+		</script>
+	</body>
+</html>

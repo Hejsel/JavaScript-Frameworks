@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="da">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Tilfældig Farve</title>
+		<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+	</head>
+	<body>
+		<div id="app" style="font-size: 72px">
+			<p v-bind:style="{ color: t > 0.75 ? 'red' : t > 0.5 ? 'green' : t > 0.25 ? 'blue' : 'orange' }">{{ t }}</p>
+		</div>
+
+		<script>
+			const app = Vue.createApp({
+				data() {
+					const t = Math.random(); // Genererer tilfældigt tal
+					return {
+						t, // Returnerer t til data
+					};
+				},
+			});
+
+			app.mount('#app');
+		</script>
+	</body>
+</html>

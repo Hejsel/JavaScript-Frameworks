@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Farver med range input</title>
+		<style>
+			#app > div {
+				width: 256px;
+				height: 256px;
+				color: white;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="app">
+			<p>Bevæg skyderne:</p>
+			<label>
+				Rød
+				<input type="range" min="0" max="255" v-model="rød" />
+				<p>{{ rød }}</p>
+			</label>
+			<label>
+				Grøn
+				<input type="range" min="0" max="255" v-model="grøn" />
+				<p>{{ grøn }}</p>
+			</label>
+			<label>
+				Blå
+				<input type="range" min="0" max="255" v-model="blå" />
+				<p>{{ blå }}</p>
+			</label>
+			<label>
+				Gennemsigtighed
+				<input type="range" min="0" max="255" v-model="gennemsigtighed" />
+				<p>{{ gennemsigtighed }}</p>
+			</label>
+			<div
+				v-bind:style="{ backgroundColor: 'rgba(' + rød + ',' + grøn + ',' + blå + ',' + gennemsigtighed / 255 + ')'}"></div>
+		</div>
+
+		<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+		<script>
+			const app = Vue.createApp({
+				data() {
+					return { rød: 0, grøn: 0, blå: 0, gennemsigtighed: 255 };
+				},
+			});
+			app.mount('#app');
+		</script>
+	</body>
+</html>

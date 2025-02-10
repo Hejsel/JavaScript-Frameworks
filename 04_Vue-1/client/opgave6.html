@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="da">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Mouse Move Effekt i Boks</title>
+		<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+		<style>
+			/* CSS for at centrere boksen i browseren */
+			body,
+			html {
+				height: 100%;
+				margin: 0;
+				display: flex;
+				justify-content: center; /* Centrerer vandret */
+				align-items: center; /* Centrerer lodret */
+				background-color: #f0f0f0; /* Baggrundsfarve */
+			}
+
+			#app {
+				width: 80%; /* Bredden af boksen */
+				max-width: 600px; /* Maksimal bredde */
+				height: 300px; /* Højde på boksen */
+				background-color: lightgray; /* Boksens baggrundsfarve */
+				display: flex;
+				justify-content: center; /* Centrerer teksten horisontalt */
+				align-items: center; /* Centrerer teksten vertikalt */
+				border: 2px solid black; /* Boksens kant */
+			}
+
+			#app div {
+				text-align: center; /* Centrerer teksten inde i boksen */
+				color: black;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="app">
+			<div v-on:mousemove="ændreFarveOgStørrelse" :style="{fontSize: fontSize + 'px', color: farve }">
+				Bevæg musen inden for boksen!
+			</div>
+		</div>
+
+		<script>
+			const app = Vue.createApp({
+				data() {
+					return {
+						fontSize: 20, // Start font størrelse
+						farve: 'black', // Start farve
+					};
+				},
+				methods: {
+					ændreFarveOgStørrelse(event) {
+						const box = event.currentTarget; // Referer til den boks, hvor musen er
+						const x = event.clientX - box.offsetLeft; // Musens X-koordinat relativt til boksen
+						const y = event.clientY - box.offsetTop; // Musens Y-koordinat relativt til boksen
+
+						// Beregn fontstørrelsen baseret på x-koordinaten i boksen
+						this.fontSize = Math.min(30 + x / 10, 100); // Juster fontstørrelsen, når musen bevæger sig vandret
+
+						// Dynamisk farveændring baseret på y-koordinaten i boksen
+						const farveVærdi = Math.floor((y / box.offsetHeight) * 255); // Skaler y-positionen til en farveværdi mellem 0 og 255
+						this.farve = `rgb(${farveVærdi}, 0, ${255 - farveVærdi})`; // Farveændring fra rød til blå baseret på y-positionen
+					},
+				},
+			});
+
+			app.mount('#app');
+		</script>
+	</body>
+</html>

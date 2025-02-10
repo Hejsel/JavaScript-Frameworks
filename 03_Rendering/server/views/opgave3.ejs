@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="da">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Skakbræt</title>
+		<style>
+			table {
+				border-collapse: collapse;
+			}
+			td {
+				width: 50px;
+				height: 50px;
+			}
+			.skak-sort {
+				background-color: <%= backgroundColor %>;
+			}
+			.skak-hvid {
+				background-color: white;
+			}
+		</style>
+	</head>
+	<body>
+		<h1>Skakbræt (<%= size %>x<%= size %>)</h1>
+		<table border="1">
+			<% for (let i = 0; i < size; i++) { %>
+			<tr>
+				<% for (let j = 0; j < size; j++) { %>
+				<td class="<%= (i + j) % 2 === 0 ? 'skak-hvid' : 'skak-sort' %>"></td>
+				<% } %>
+			</tr>
+			<% } %>
+		</table>
+	</body>
+</html>

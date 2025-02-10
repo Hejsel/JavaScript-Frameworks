@@ -3,9 +3,9 @@ const app = express();
 const port = 3000;
 const IP = 'localhost';
 
-// ➤ Opsætning af EJS som template-motor
-app.set('view engine', 'ejs');
-app.set('views', __dirname + '/views'); // Sikrer, at vi kigger i /views-mappen
+// ➤ Opsætning af Pug som template-motor
+app.set('view engine', 'pug');
+app.set('views', __dirname + '/views'); // Sørg for, at vi kigger i /views-mappen
 
 // ➤ Sender skakbræt HTML til klienten
 app.get('/opgave3', (req, res) => {
@@ -13,8 +13,11 @@ app.get('/opgave3', (req, res) => {
 	const size = parseInt(req.query.size) || 8;
 	const backgroundColor = req.query.color || 'black';
 
-	// ➤ Send data til EJS-templaten
-	res.render('opgave3', { size, backgroundColor });
+	// ➤ Opret en array med tal fra 0 til size-1
+	const rangeArray = Array.from({ length: size }, (_, index) => index);
+
+	// ➤ Send data til Pug-templaten
+	res.render('opgave3', { size, backgroundColor, rangeArray });
 });
 
 // ➤ Start serveren

@@ -3,18 +3,18 @@ const app = express();
 const port = 3000;
 const IP = 'localhost';
 
-// ➤ Opsætning af EJS som template-motor
-app.set('view engine', 'ejs');
-app.set('views', __dirname + '/views'); // Sikrer, at vi kigger i /views-mappen
+// ➤ Opsætning af Pug som template-motor
+app.set('view engine', 'pug');
+app.set('views', __dirname + '/views'); // Sørg for at kigge i /views-mappen
 
 // ➤ Route til forsiden
 app.get('/', (req, res) => {
-	// Generer to tilfældige heltal mellem 1 og 10
+	// Generer to tilfældige heltal mellem -5,000,000 og 5,000,000
 	const x = Math.floor(Math.random() * 1000000) - 5000000;
 	const y = Math.floor(Math.random() * 1000000) - 5000000;
 	const z = x * y;
 
-	// Send data til EJS-templaten
+	// Send data til Pug-templaten
 	res.render('opgave2', { x, y, z });
 });
 

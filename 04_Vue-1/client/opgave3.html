@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="da">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Tilfældig Farve</title>
+		<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+	</head>
+	<body>
+		<div id="app">
+			<div v-bind:style="{ fontSize: size + 'px' }">Det er en Taurus</div>
+			<img v-show="visBillede" v-bind:src="url" />
+		</div>
+
+		<script>
+			const app = Vue.createApp({
+				data() {
+					return {
+						size: 72,
+						url: 'http://www.railfaneurope.net/pix/at/electric/1016/017-019/1016_017_Vf.jpg',
+						visBillede: Math.random() > 0.5 || Math.random() > 0.5, // Bruger ét Math.random() kald direkte for begge tal
+					};
+				},
+			});
+			app.mount('#app');
+		</script>
+	</body>
+</html>

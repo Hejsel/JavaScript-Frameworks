@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="da">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Sekund Check</title>
+		<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+	</head>
+	<body>
+		<div id="app">
+			<div
+				v-for="(url, index) in [
+				'http://www.railfaneurope.net/pix/at/electric/1016/017-019/1016_017_Vf.jpg',
+				'http://www.railfaneurope.net/pix/de/electric/120_1/orientrot/101-119/db120ic.jpg',
+				'http://www.railfaneurope.net/pix/de/electric/historic/103_1/rot-beige/184/misc/103_184-8m.jpg'
+			]"
+				:key="index">
+				<img :src="url" alt="Locomotive image" style="max-width: 300px; margin: 10px" />
+				<p>Billede {{ index + 1 }}: {{ url.substring(url.lastIndexOf('/') + 1) }}</p>
+			</div>
+		</div>
+
+		<script>
+			const app = Vue.createApp({});
+
+			app.mount('#app');
+		</script>
+	</body>
+</html>
