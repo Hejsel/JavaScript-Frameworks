@@ -31,6 +31,18 @@ app.get('/oversigt/:filename', (req, res) => {
 	res.sendFile(path.join(__dirname, '/oversigt.html'));
 });
 */
+
+// ➤ Specifik Routing
+/*
+app.get('/login', (req, res) => {
+    res.sendFile(path.join(__dirname, 'login.html'));
+});
+
+app.get('/oversigt', (req, res) => {
+    res.sendFile(path.join(__dirname, 'oversigt.html'));
+});
+*/
+
 app.listen(port, IP, () => {
 	console.log(`Serveren kører på http://${IP}:${port}`); //det er selvfølgelig ikke obligatorisk at have dette console-statement
 });
