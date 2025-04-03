@@ -1,0 +1,73 @@
+<html>
+<head>
+    <title>Chat app using Socket IO and Node JS</title>
+    <style>
+        /* Styling som tidligere */
+        /* ... */
+    </style>
+</head>
+
+<body>
+    <h1>GeeksforGeeks</h1>
+    <div>
+        <h2 id="logo">Chat App using Socket io</h2>
+    </div>
+    <form id="form">
+        <input type="text" placeholder="Name" id="myname">
+        <input type="text" placeholder="Message" id="message">
+        <button type="submit">Send</button>
+    </form>
+
+    <div>
+        <label for="roomSelect">Vælg et rum: </label>
+        <select id="roomSelect">
+            <option value="room1">Room 1</option>
+            <option value="room2">Room 2</option>
+            <option value="room3">Room 3</option>
+        </select>
+        <button id="joinRoomBtn">Join Room</button>
+    </div>
+
+    <div id="messageArea"></div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        let socket = io();
+        let form = document.getElementById('form');
+        let myname = document.getElementById('myname');
+        let message = document.getElementById('message');
+        let messageArea = document.getElementById("messageArea");
+        let joinRoomBtn = document.getElementById('joinRoomBtn');
+        let roomSelect = document.getElementById('roomSelect');
+        
+        // Tilslut klienten til et rum, når der trykkes på 'Join Room'
+        joinRoomBtn.addEventListener('click', () => {
+            let roomId = roomSelect.value;
+            socket.emit("rumskift", roomId); // Skift rum
+        });
+
+        form.addEventListener("submit", (e) => {
+            e.preventDefault();
+            if (message.value) {
+                socket.emit('send name', myname.value);
+                socket.emit('send message', message.value);
+                message.value = "";
+            }
+        });
+
+        socket.on("send name", (username) => {
+            let name = document.createElement("p");
+            name.classList.add("username");
+            name.textContent = username + ":";
+            messageArea.appendChild(name);
+        });
+
+        socket.on("send message", (chat) => {
+            let chatContent = document.createElement("p");
+            chatContent.classList.add("message");
+            chatContent.textContent = chat;
+            messageArea.appendChild(chatContent);
+        });
+    </script>
+</body>
+</html>

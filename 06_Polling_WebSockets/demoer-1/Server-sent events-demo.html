@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SSE-Demo</title>
+  <style>
+    .container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      width: 100vw;
+    }
+
+    #venstre {
+      background-color: lightgreen;
+      padding: 20px;
+    }
+
+    #højre {
+      background-color: lightblue;
+      padding: 20px;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Server-Sent Events-Demo</h1>
+  <p id="output"></p>
+  <div class="container">
+    <div id="venstre"></div>
+    <div id="højre"></div>
+  </div>
+  <script>
+    const eventSource = new EventSource("http://localhost:3000/sse");
+    const venstre = document.getElementById("venstre"), højre = document.getElementById("højre");
+    const output = document.getElementById("output");
+    setInterval(() => {
+      if (output.textContent.length < 10) output.textContent += "."; else output.textContent = ".";
+    }, 500);
+    /*
+    eventSource.onmessage = (event) => {
+      const besked = event.data
+      const pos = besked.indexOf(":"); if (pos < 0) alert("Korrumperet server");
+      const side = besked.slice(0, pos).trim(), data = besked.slice(pos + 1).trim();
+      if (side === "venstre") venstre.innerHTML += "<br>" + data; else højre.innerHTML += "<br>" + data;
+    };
+    */
+
+    // OMSKREVET TIL AT BENYTTE UNDERKANALER
+    eventSource.addEventListener("venstre", (event) => {
+      venstre.innerHTML += "<br>" + event.data;
+    });
+    eventSource.addEventListener("højre", (event) => {
+      højre.innerHTML += "<br>" + event.data;
+    });
+
+    eventSource.onerror = () => {
+      alert("SSE-forbindelsen er gået tabt");
+      eventSource.close();
+    };
+  </script>
+</body>
+
+</html>

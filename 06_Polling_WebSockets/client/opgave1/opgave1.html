@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Opgave 1</title>
+</head>
+
+<body>
+  <canvas id="canvas" width=1000 height=500 style="border: 1px black solid;"></canvas>
+  <script>
+    let dx = 10, x = dx, ctx = document.getElementById("canvas").getContext("2d");
+    ctx.fillStyle="lightblue";ctx.fillRect(0,0,ctx.canvas.width,ctx.canvas.height);
+    ctx.beginPath(); ctx.moveTo(0, ctx.canvas.height / 2); ctx.lineTo(ctx.canvas.width - 1, ctx.canvas.height / 2); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(0, ctx.canvas.height / 2);
+    async function render() {
+      const res = await fetch("http://localhost:3000/long-poll");
+      const tekst = await res.text();console.log(tekst);
+      if (tekst) {
+        let frekvens = parseFloat(tekst);
+        let d = frekvens - 50, absD = Math.abs(d);
+        if (absD < 0.01) ctx.strokeStyle = "green";
+        else if (absD < 0.02) ctx.strokeStyle = "lightGreen";
+        else if (absD < 0.03) ctx.strokeStyle = "yellow";
+        else if (absD < 0.04) ctx.strokeStyle = "orange";
+        else ctx.strokeStyle = "red";
+        let y = ctx.canvas.height / 2 + d * 2000;
+        ctx.lineTo(x, y); ctx.stroke(); ctx.beginPath(); ctx.moveTo(x, y); x += dx;
+        if (x >= ctx.canvas.width) {
+          ctx.beginPath();
+          ctx.moveTo(0, ctx.canvas.height / 2);
+          x = dx;
+        }
+      }
+      render();
+    }
+    render();
+  </script>
+</body>
+
+</html>

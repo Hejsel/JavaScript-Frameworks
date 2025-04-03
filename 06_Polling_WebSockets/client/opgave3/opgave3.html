@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="da">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WebSocket Privat Chat</title>
+  <style>
+    .container {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>WebSocket Privat Chat</h1>
+
+  <label for="id">Dit ID:</label>
+  <input type="text" id="id" placeholder="Vælg et ID">
+
+  <label for="modtagerId">Modtagerens ID:</label>
+  <input type="text" id="modtagerId" placeholder="Indtast modtagerens ID">
+
+  <label for="besked">Besked:</label>
+  <input type="text" id="besked" placeholder="Skriv din besked">
+  <button id="sendButton" onclick="sendBesked()" disabled>Send</button>
+  <button id="connectButton" onclick="connectClient()" disabled>Forbind</button> <!-- Forbind knappen starter som disabled -->
+
+  <div class="container">
+    <h2>Modtagne beskeder:</h2>
+    <div id="højre"></div>
+  </div>
+
+  <script>
+    const ws = new WebSocket("ws://localhost:3000");
+    const sendButton = document.getElementById("sendButton");
+    const connectButton = document.getElementById("connectButton");
+    const højre = document.getElementById("højre");
+    let isConnected = false;
+    let userID = null;
+
+    // Når WebSocket-forbindelsen åbnes
+    ws.onopen = () => {
+      console.log("Forbindelsen er åben.");
+      isConnected = true;
+      connectButton.disabled = false; // Aktiver forbindelses-knappen, når forbindelsen er åben
+      sendButton.disabled = true;  // Send-knappen forbliver deaktiveret indtil bruger-ID er sendt
+    };
+
+    // Når en besked modtages fra serveren
+    ws.onmessage = (event) => {
+      højre.innerHTML += `<p>${event.data}</p>`;
+    };
+
+    // Når WebSocket-forbindelsen lukkes
+    ws.onclose = () => {
+      console.log("Forbindelsen er lukket.");
+      isConnected = false;
+      connectButton.disabled = false;  // Aktiver forbindelses-knappen igen ved frakobling
+      sendButton.disabled = true;  // Deaktiver send-knappen ved frakobling
+    };
+
+    // Funktion til at sende en besked
+    function sendBesked() {
+      const id = document.getElementById("id").value;
+      const modtagerId = document.getElementById("modtagerId").value;
+      const besked = document.getElementById("besked").value;
+
+      if (id && modtagerId && besked) {
+        if (isConnected) {
+          const beskedObj = { id, modtagerId, besked };
+          ws.send(JSON.stringify(beskedObj)); // Send besked som JSON
+        } else {
+          alert("Forbindelsen er ikke åben!");
+        }
+      } else {
+        alert("Udfyld alle felter!");
+      }
+    }
+
+    // Funktion til at forbinde klienten og sende ID til serveren
+    function connectClient() {
+      userID = document.getElementById("id").value;
+      if (userID && isConnected) {
+        const idObj = { id: userID };
+        ws.send(JSON.stringify(idObj)); // Send ID til serveren
+        console.log(`Forbundet som ${userID}`);
+        sendButton.disabled = false;  // Aktiver send-knappen når ID er sendt
+      } else {
+        alert("Indtast venligst et ID før du forbinder.");
+      }
+    }
+  </script>
+</body>
+
+</html>

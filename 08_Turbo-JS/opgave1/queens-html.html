@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>8 dronninger</title>
+</head>
+
+<body>
+  <label for="dronninger">Dronninger:</label><input id="dronninger" name="dronninger" type="number" value="14" />
+  <label for="iterationer">iterationer:</label><input id="iterationer" name="iterationer" type="number" value="7" />
+  <button onclick="løs()">Start</button>
+  <p id="output"></p>
+  <script>
+    function fasterPositionQueens(noOfQueens) {
+      var queens = new Uint32Array(noOfQueens), columnOccupied = new Uint32Array(noOfQueens);
+      var venstreDiagonalOccupied = new Uint32Array(noOfQueens * 2), højreDiagonalOccupied = new Uint32Array(noOfQueens * 2);
+      var row = 0, minus1 = noOfQueens - 1, col = 0, noOfSolutions = 0;
+      do {
+        do {
+          if (columnOccupied[col] || venstreDiagonalOccupied[row + col] || højreDiagonalOccupied[row + minus1 - col]) {
+            ++col;
+          } else {
+            if (row >= minus1) {
+              ++noOfSolutions; break;
+            } else {
+              columnOccupied[col] = 1;
+              venstreDiagonalOccupied[row + col] = 1;
+              højreDiagonalOccupied[row + minus1 - col] = 1;
+              queens[row++] = col;              
+              col = 0;
+            }
+          }
+        } while (col < noOfQueens);
+        if (--row < 0) return noOfSolutions;
+        while (1) {
+          columnOccupied[col = queens[row]] = 0;
+          venstreDiagonalOccupied[row + col] = 0;
+          højreDiagonalOccupied[row + minus1 - col] = 0;
+          if (++col === noOfQueens) {
+            if (--row < 0) return noOfSolutions;
+          } else break;
+        }
+      } while (1);
+    }
+    function løs() {
+      const queens = Number(document.getElementById("dronninger").value || 14);
+      let iterationer = Number(document.getElementById("iterationer").value || 7);
+      const output = document.getElementById("output");
+      let minima = [];
+      output.innerHTML += `Beregner ${queens}<br>`;
+      setTimeout(() => requestAnimationFrame(mål), 50);
+      function mål() {
+        let tid = performance.now();
+        let løsninger = fasterPositionQueens(queens);
+        tid = (performance.now() - tid);
+        output.innerHTML += `${iterationer}. ${løsninger} på ${(tid / 1000).toFixed(3)}<br>`;
+        minima.push(tid);
+        if (!(--iterationer)) {
+          minima.sort((a, b) => Number(a) - Number(b));
+          let avg = (minima[0] + minima[1] + minima[2]) / 3000;
+          output.innerHTML += `Gennemsnittet af de tre hurtigste er ${avg.toFixed(3)}<br>`;
+        } else requestAnimationFrame(mål);
+      }
+    }
+  </script>
+</body>
+
+</html>

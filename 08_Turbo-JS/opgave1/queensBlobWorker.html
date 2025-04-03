@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset=utf-8>
+  <title>8 dronninger med worker</title>
+</head>
+
+<body>
+  <label for="dronninger">Dronninger:</label><input id="dronninger" name="dronninger" type="number" value="14" />
+  <label for="iterationer">iterationer:</label><input id="iterationer" name="iterationer" type="number" value="7" />
+  <button onclick="løs()">Start</button>
+  <p id="output"></p>
+  <script id="worker1">
+    onmessage = function (e) {
+      let minima = []; postMessage(`Beregner ${e.data.dronninger}<br>`);
+      for (var i = 1; i <= e.data.iterationer; i++) {
+        let tid = performance.now();
+        let løsninger = fasterPositionQueens(e.data.dronninger);
+        tid = performance.now() - tid; minima.push(tid);
+        postMessage(`${i}. ${løsninger} på ${tid / 1000}<br>`);
+      }
+      minima.sort((a, b) => Number(a) - Number(b));
+      let avg = (minima[0] + minima[1] + minima[2]) / 3000;
+      postMessage(`Gennemsnittet af de tre hurtigste er ${avg}<br>`);
+    }
+    function fasterPositionQueens(noOfQueens) {
+      var queens = new Uint32Array(noOfQueens), columnOccupied = new Uint32Array(noOfQueens);
+      var venstreDiagonalOccupied = new Uint32Array(noOfQueens * 2), højreDiagonalOccupied = new Uint32Array(noOfQueens * 2);
+      var row = 0, minus1 = noOfQueens - 1, col = 0, noOfSolutions = 0;
+      do {
+        do {
+          if (columnOccupied[col] || venstreDiagonalOccupied[row + col] || højreDiagonalOccupied[row + minus1 - col]) {
+            ++col;
+          } else {
+            if (row >= minus1) {
+              ++noOfSolutions; break;
+            } else {
+              columnOccupied[col] = 1;
+              venstreDiagonalOccupied[row + col] = 1;
+              højreDiagonalOccupied[row + minus1 - col] = 1;
+              queens[row++] = col;
+              col = 0;
+            }
+          }
+        } while (col < noOfQueens);
+        if (--row < 0) return noOfSolutions;
+        while (1) {
+          columnOccupied[col = queens[row]] = 0;
+          venstreDiagonalOccupied[row + col] = 0;
+          højreDiagonalOccupied[row + minus1 - col] = 0;
+          if (++col === noOfQueens) {
+            if (--row < 0) return noOfSolutions;
+          } else break;
+        }
+      } while (1);
+    }
+
+  </script>
+  <script>
+    const queens = Number(document.getElementById("dronninger").value || 14);
+    const iterationer = Number(document.getElementById("iterationer").value || 7);
+    const output = document.getElementById("output");
+    var blob = new Blob([
+      document.querySelector('#worker1').textContent
+    ], { type: "text/javascript" });
+    // Note: window.webkitURL.createObjectURL() in Chrome 10+.
+    var worker = new Worker(window.webkitURL.createObjectURL(blob));
+    worker.onmessage = (function (e) { output.innerHTML += e.data });
+    function løs() {
+      worker.postMessage({ dronninger: queens, iterationer: iterationer });
+    }
+  </script>
+</body>
+
+</html>
